@@ -1,0 +1,9 @@
+.QueueList table {
+    margin-top: 50px;
+}
+
+.QueueList table .number {
+    font-weight: bold;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+    padding-right: 15px;
+}

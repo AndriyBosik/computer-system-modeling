@@ -1,0 +1,10 @@
+.System canvas {
+    width: 1000px;
+    height: 500px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.System .error, .System .success {
+    font-size: 30px;
+}
+

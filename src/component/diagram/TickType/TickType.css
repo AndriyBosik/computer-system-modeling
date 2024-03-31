@@ -1,0 +1,53 @@
+.TickType.PROCESSOR, .TickType.EMPTY, .TickType.READ, .TickType.WRITE, .TickType.TRANSPORT, .TickType.RUN {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 30px;
+    margin: 0 5px;
+    border-radius: 10px;
+    min-width: 130px;
+}
+
+.TickType.PROCESSOR {
+    background-color: #ff6f0099;
+    color: white;
+    padding: 10px 30px;
+    margin: 0 5px;
+    box-shadow: 0 0 20px 1px #ff6f0099;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.TickType.EMPTY {
+    background-color: #bdbdbd;
+    box-shadow: 0 0 20px 1px #bdbdbd99;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    opacity: 0.7;
+}
+
+.TickType.READ {
+    background-color: #c0ca33;
+    color: white;
+    box-shadow: 0 0 20px 1px #c0ca33bb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.TickType.WRITE {
+    background-color: #e53935;
+    color: white;
+    box-shadow: 0 0 20px 1px #e53935bb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.TickType.TRANSPORT {
+    background-color: #039be5;
+    color: white;
+    font-size: 15px !important;
+    box-shadow: 0 0 20px 1px #039be5bb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.TickType.RUN {
+    background-color: #0097a7;
+    color: white;
+    box-shadow: 0 0 20px 1px #0097a7bb;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}

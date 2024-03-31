@@ -1,0 +1,28 @@
+.Task canvas {
+    width: 1000px;
+    height: 1000px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.Task .error, .Task .success {
+    font-size: 30px;
+}
+
+.Task .properties .collapsible {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.Task .properties .collapsible .collapsible-header {
+    padding: 1rem 0 !important;
+    font-size: 25px;
+}
+
+.Task .properties .collapsible .collapsible-body {
+    padding: 0 !important;
+}
+
+.Task .properties .collapsible .collapsible-header, .Task .properties .collapsible .collapsible-body {
+    border: none !important;
+    box-shadow: none !important;
+}

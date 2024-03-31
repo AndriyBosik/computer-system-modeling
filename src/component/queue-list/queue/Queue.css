@@ -1,0 +1,51 @@
+.Queue .list {
+    flex-wrap: wrap;
+}
+
+.Queue .task-separator i {
+    font-size: 35px;
+    color: red;
+}
+
+.Queue .task-separator {
+    padding: 0 5px;
+}
+
+.Queue .task {
+    align-items: center;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 0 20px 3px rgba(0, 0, 0, 0.3);
+}
+
+.Queue .task, .Queue .model {
+    margin-top: 15px;
+}
+
+.Queue .task .hint {
+    background-color: #5e35b1;
+    padding: 0 5px;
+    font-size: 17px;
+    font-weight: bold;
+    color: white;
+}
+
+.Queue .task .wrapper {
+    font-size: 25px;
+    background-color: #4dd0e1;
+}
+
+.Queue .model i {
+    font-size: 55px;
+    color: #009688;
+    padding-right: 10px;
+    border-right: 1px solid rgba(0, 0, 0, 0.3);
+    margin-right: 20px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.5s;
+}
+
+.Queue .model i:hover {
+    opacity: 1;
+}
