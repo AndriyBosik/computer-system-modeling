@@ -8,7 +8,7 @@ import M from "materialize-css";
 import System from './component/system/System';
 import Actions from './component/actions/Actions';
 import { useEffect, useState } from 'react';
-import { checkCycle, checkConnected, buildPaths } from './handler/graph';
+import { checkCycle, checkConnected, buildPaths, buildTaskMatrix } from './handler/graph';
 import { Help } from './component/help/Help';
 import { QueueList } from './component/queue-list/QueueList';
 import { Diagram } from './component/diagram/Diagram';
@@ -44,6 +44,9 @@ function App() {
 
         const modals = document.querySelectorAll(".modal");
         M.Modal.init(modals, {});
+
+        const selects = document.querySelectorAll("select");
+        M.FormSelect.init(selects, {});
     }, []);
     
     const [taskChecked, setTaskChecked] = useState(false);
@@ -52,7 +55,7 @@ function App() {
     const [initialComponents, setInitialComponents] = useState({task: {tasks: [], relations: []}, system: {processes: [], relations: []}});
     const [taskStatus, setTaskStatus] = useState({value: "none"});
     const [systemStatus, setSystemStatus] = useState({value: "none"});
-    const [diagramState, setDiagramState] = useState({systemMatrix: [], systemPaths: [], taskQueue: []});
+    const [diagramState, setDiagramState] = useState({systemMatrix: [], taskMatrix: [], systemPaths: [], taskQueue: []});
 
     const onTaskChanged = () => {
         setTaskChecked(false);
@@ -113,7 +116,8 @@ function App() {
         M.Tabs.getInstance(document.getElementById("nav-tabs")).select("diagram");
         setDiagramState(previous => ({
             ...previous,
-            taskQueue: queue
+            taskQueue: queue,
+            taskMatrix: buildTaskMatrix(components.task)
         }));
     };
 
@@ -144,7 +148,7 @@ function App() {
                         <QueueList onModelQueue={onModelQueue} modelable={systemChecked} task={taskChecked ? components.task : {tasks: [], relations: []}} />
                     </div>
                     <div id="diagram" className="nav-tab">
-                        <Diagram matrix={diagramState.systemMatrix} paths={diagramState.systemPaths} queue={diagramState.taskQueue} />
+                        <Diagram systemMatrix={diagramState.systemMatrix} taskMatrix={diagramState.taskMatrix} paths={diagramState.systemPaths} queue={diagramState.taskQueue} />
                     </div>
                     <div id="statistics" className="nav-tab">
                         Statistics

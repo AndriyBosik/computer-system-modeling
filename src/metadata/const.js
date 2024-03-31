@@ -11,3 +11,16 @@ export const TICK_TYPE = {
     WRITE: "WRITE",
     RUN: "RUN"
 };
+
+export const TASK_STATUS = {
+    PENDING: "PENDING",
+    PREPARED: "PREPARED",
+    RUNNING: "RUNNING",
+    COMPLETED: "COMPLETED"
+};
+
+export const PROCESSOR_STATUS = {
+    PENDING: "PENDING",
+    WAITING: "WAITING",
+    RUNNING: "RUNNING"
+};

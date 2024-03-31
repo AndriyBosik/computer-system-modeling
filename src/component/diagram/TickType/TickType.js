@@ -15,7 +15,7 @@ export const TickType = ({
         } else if (type == TICK_TYPE.TRANSPORT) {
             return `T[${details.parentTask}-${details.task}]{${details.processor}}`;
         } else if (type == TICK_TYPE.RUN) {
-            return `R[${details.task}]`;
+            return `R[${details.task + 1}]`;
         }
         return null;
     }

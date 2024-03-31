@@ -93,13 +93,29 @@ export const buildPaths = (processes, relations) => {
             }
         }
     }
-    console.log("All paths:", paths);
     for (const [key, value] of Object.entries(paths)) {
         const shortestPath = Math.min(...value.map(item => item.length));
         paths[key] = value.filter(item => item.length == shortestPath);
     }
-    console.log("Shortest paths:", paths);
     return [matrix, paths];
+}
+
+export const buildTaskMatrix = ({tasks, relations}) => {
+    const matrix = [];
+    const n = tasks.length;
+    for (let i = 0; i < n; i++) {
+        const row = [];
+        for (let j = 0; j < n; j++) {
+            row.push(i == j ? tasks[i].weight : 0);
+        }
+        matrix.push(row);
+    }
+    
+    for (const relation of relations) {
+        matrix[relation.id1 - 1][relation.id2 - 1] = relation.weight;
+    }
+
+    return matrix;
 }
 
 const findCycleDfs = (vertex, matrix, visited, stack, order) => {

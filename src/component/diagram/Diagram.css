@@ -1,3 +1,15 @@
 .Diagram .tick-row {
     margin-bottom: 7px;
 }
+
+.Diagram .order {
+    color: white;
+    font-size: 20px;
+    background-color: #ff6f0099;
+    border-radius: 10px;
+    text-align: center;
+    width: 70px;
+    min-width: 70px;
+    font-weight: bold;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
