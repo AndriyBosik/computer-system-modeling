@@ -6,10 +6,11 @@ export const PACKET_PROCESS_COLOR = "#64b5f6";
 export const TICK_TYPE = {
     PROCESSOR: "PROCESSOR",
     EMPTY: "EMPTY",
-    TRANSPORT: "TRANSPORT",
+    TRANSFER: "TRANSFER",
     READ: "READ",
     WRITE: "WRITE",
-    RUN: "RUN"
+    RUN: "RUN",
+    WAITING: "WAITING"
 };
 
 export const TASK_STATUS = {
@@ -22,5 +23,10 @@ export const TASK_STATUS = {
 export const PROCESSOR_STATUS = {
     PENDING: "PENDING",
     WAITING: "WAITING",
+    RUNNING: "RUNNING"
+};
+
+export const TRANSFER_TYPE = {
+    PENDING: "PENDING",
     RUNNING: "RUNNING"
 };

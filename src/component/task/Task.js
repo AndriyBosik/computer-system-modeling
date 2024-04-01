@@ -458,6 +458,12 @@ const Task = ({onCheck, onChange, initialStatus, initialTasks = [], initialRelat
                                             <td>{relations.length == 0 ? "-" : Math.max(...relations.map(relation => relation.weight))}</td>
                                         </tr>
                                         <tr>
+                                            <td>Total tasks weight</td>
+                                            <td>{tasks.reduce((acc, item) => acc + item.weight, 0)}</td>
+                                            <td>Total relations weight</td>
+                                            <td>{relations.reduce((acc, item) => acc + item.weight, 0)}</td>
+                                        </tr>
+                                        <tr>
                                             <td>Tasks count</td>
                                             <td>{tasks.length}</td>
                                             <td>Connectivity</td>

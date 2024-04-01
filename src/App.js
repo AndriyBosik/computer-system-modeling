@@ -148,7 +148,20 @@ function App() {
                         <QueueList onModelQueue={onModelQueue} modelable={systemChecked} task={taskChecked ? components.task : {tasks: [], relations: []}} />
                     </div>
                     <div id="diagram" className="nav-tab">
-                        <Diagram systemMatrix={diagramState.systemMatrix} taskMatrix={diagramState.taskMatrix} paths={diagramState.systemPaths} queue={diagramState.taskQueue} />
+                        {
+                            (taskChecked && systemChecked && diagramState.taskQueue.length > 0) ? (
+                                <Diagram systemMatrix={diagramState.systemMatrix} taskMatrix={diagramState.taskMatrix} paths={diagramState.systemPaths} queue={diagramState.taskQueue} />
+                            ) : (
+                                <div style={{fontSize: "25px"}}>
+                                    To see diagram, you should ensure that the following conditions are met:
+                                    <ol style={{textAlign: "left"}}>
+                                        <li>Task on the "TASK" tab is checked</li>
+                                        <li>System on the "SYSTEM" tab is checked</li>
+                                        <li>Queue on the "QUEUE" tab is selected</li>
+                                    </ol>
+                                </div>
+                            )
+                        }
                     </div>
                     <div id="statistics" className="nav-tab">
                         Statistics

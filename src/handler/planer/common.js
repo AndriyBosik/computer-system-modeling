@@ -1,11 +1,18 @@
 import { PROCESSOR_STATUS, TASK_STATUS } from "../../metadata/const";
 
-export const buildTasksDefinitions = taskMatrix => {
-    return buildTasksDeps(taskMatrix).map((deps, index) => ({
+export const buildTasksDefinitions = (taskMatrix, queue) => {
+    const definitions = buildTasksDeps(taskMatrix).map((deps, index) => ({
+        id: index,
         status: deps.length > 0 ? TASK_STATUS.PENDING : TASK_STATUS.PREPARED,
         weight: taskMatrix[index][index],
+        priority: 0,
+        runningOn: null,
         deps
     }));
+    for (let i = 0; i < queue.length; i++) {
+        definitions[queue[i].vertex].priority = queue.length - i;
+    }
+    return definitions;
 }
 
 export const buildSystemDefinitions = (systemMatrix, paths) => {
@@ -13,6 +20,7 @@ export const buildSystemDefinitions = (systemMatrix, paths) => {
 
     for (let i = 0; i < systemMatrix.length; i++) {
         definitions.push({
+            id: i,
             pendingTime: 0,
             currentTask: null,
             status: PROCESSOR_STATUS.PENDING,
@@ -23,9 +31,12 @@ export const buildSystemDefinitions = (systemMatrix, paths) => {
             connectivity: getConnectivity(i, systemMatrix),
             cache: [],
             io: {
-                pending: []
+                queue: [],
+                ticks: []
             },
-            details: {}
+            details: {
+                waitingFor: []
+            }
         });
     }
 
