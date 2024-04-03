@@ -13,24 +13,6 @@ import { Help } from './component/help/Help';
 import { QueueList } from './component/queue-list/QueueList';
 import { Diagram } from './component/diagram/Diagram';
 
-const test = arr => {
-    if (arr.length == 0) {
-        return [];
-    }
-    const result = [];
-    for (let i = 0; i < arr[0].length; i++) {
-        const values = test(arr.slice(1));
-        if (values.length == 0) {
-            result.push([arr[0][i]]);
-        } else {
-            for (let value of values) {
-                result.push([arr[0][i], ...value]);
-            }
-        }
-    }
-    return result;
-}
-
 function App() {
     useEffect(() => {
         const tabs = document.querySelectorAll(".tabs");
@@ -56,6 +38,16 @@ function App() {
     const [taskStatus, setTaskStatus] = useState({value: "none"});
     const [systemStatus, setSystemStatus] = useState({value: "none"});
     const [diagramState, setDiagramState] = useState({systemMatrix: [], taskMatrix: [], systemPaths: [], taskQueue: []});
+
+    useEffect(() => {
+        if (!taskChecked) {
+            setDiagramState(previous => ({
+                ...previous,
+                taskMatrix: [],
+                taskQueue: []
+            }));
+        }
+    }, [taskChecked]);
 
     const onTaskChanged = () => {
         setTaskChecked(false);

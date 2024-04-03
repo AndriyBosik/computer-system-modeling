@@ -11,8 +11,6 @@ const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initia
     const [selectedProcess, setSelectedProcess] = useState(null);
     const [relations, setRelations] = useState([]);
     const [graphChanged, setGraphChanged] = useState(false);
-    const [type, setType] = useState("message");
-    const [packetsSize, setPacketsSize] = useState(1);
     const [status, setStatus] = useState({value: "none"});
     const [history, setHistory] = useState([]);
     const canvasRef = useRef(0);
@@ -254,9 +252,7 @@ const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initia
         return {
             x: x,
             y: y,
-            id: processes.length + 1,
-            type: type,
-            packetsSize: type == "message" ? null : packetsSize
+            id: processes.length + 1
         }
     }
 
@@ -333,37 +329,7 @@ const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initia
                     )
                 }
             </div>
-            <div style={{height: 30}} />
-            <div className="s-hflex">
-                <form action="#" className="s-hflex">
-                    <p style={{textAlign: "left"}}>
-                        <label>
-                            <input className="with-gap" name="type" type="radio" value="message" onChange={_ => setType("message")} checked={type == "message"} />
-                            <span>Message</span>
-                        </label>
-                    </p>
-                    <div style={{width: 50}} />
-                    <p style={{textAlign: "left"}}>
-                        <label>
-                            <input className="with-gap" name="type" type="radio" value="packet" onChange={_ => setType("packet")} checked={type == "packet"} />
-                            <span>Packets</span>
-                        </label>
-                    </p>
-                    {
-                        type == "packet" ? (
-                            <>
-                                <div style={{width: 50}} />
-                                <div className="input-field" style={{margin: 0}}>
-                                    <input id="packets-size" type="number" style={{width: 150}} min="1" placeholder="Packets size" value={packetsSize} onChange={event => setPacketsSize(event.target.value)} />
-                                    <label className="active" htmlFor="weight">Packets size</label>
-                                </div>
-                            </>
-                        ) : null
-                    }
-                </form>
-            </div>
             <div style={{height: 10}} />
-            <canvas ref={canvasRef} id="graph" width="1000" height="500" onClick={handleCanvasClick} />
             {
                 status.value == "none" ? null : (
                     status.value == "error" ? (
@@ -377,6 +343,7 @@ const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initia
                     )
                 )
             }
+            <canvas ref={canvasRef} id="graph" width="1000" height="500" onClick={handleCanvasClick} />
         </div>
     );
 }

@@ -76,7 +76,7 @@ export const drawSystem = (canvas, system) => {
         context.beginPath();
             
         context.arc(x, y, RADIUS, 0, 2 * Math.PI);
-        context.fillStyle = el.type == "message" ? MESSAGE_PROCESS_COLOR : PACKET_PROCESS_COLOR;
+        context.fillStyle = MESSAGE_PROCESS_COLOR;
         context.fill();
         context.lineWidth = 3;
         context.strokeStyle = "black";
@@ -86,7 +86,7 @@ export const drawSystem = (canvas, system) => {
         context.fillStyle = "black";
         context.textAlign = "center";
         context.fillText(
-            el.type == "message" ? el.id : `${el.id} | ${el.packetsSize}`,
+            el.id,
             x,
             y + 3);
         

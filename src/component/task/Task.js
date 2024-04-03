@@ -475,7 +475,6 @@ const Task = ({onCheck, onChange, initialStatus, initialTasks = [], initialRelat
                         </li>
                     </ul>
                 </div>
-                <canvas ref={canvasRef} id="graph" width="1000" height="1000" onClick={handleCanvasClick} />
                 {
                     status.value == "none" ? null : (
                         status.value == "error" ? (
@@ -489,6 +488,7 @@ const Task = ({onCheck, onChange, initialStatus, initialTasks = [], initialRelat
                         )
                     )
                 }
+                <canvas ref={canvasRef} id="graph" width="1000" height="1000" onClick={handleCanvasClick} />
             </div>
             <div id="generation-params" className="modal" ref={modalRef}>
                 {

@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import { TICK_TYPE } from "../../metadata/const";
 import "./Diagram.css";
 import { TickType } from "./TickType/TickType";
-import { plan } from "../../handler/planer/free.first";
-import { getCriticalToEnd } from "../../handler/queue";
-import { toStr } from "../../handler/debug";
+import { plan as freeFirstPlan } from "../../handler/planer/free.first";
+import { plan as neighborModelingPlan } from "../../handler/planer/neighbor.modeling";
 
 export const Diagram = props => {
     const {paths, queue, systemMatrix, taskMatrix} = props;
     const [algorithmType, setAlgorithmType] = useState("free-first");
-    const [mode, setMode] = useState("execution", "dataTransfer")
-    const [ticks, setTicks] = useState(plan(paths, queue, systemMatrix, taskMatrix));
+    const [mode, setMode] = useState("execution")
+    const [ticks, setTicks] = useState([]);
     const [stats, setStats] = useState({
         totalTasksWeight: null,
         ticksCount: null,
@@ -19,8 +18,14 @@ export const Diagram = props => {
     });
 
     useEffect(() => {
+        const plan = algorithmType == "free-first" ? freeFirstPlan : neighborModelingPlan;
         setTicks(plan(paths, queue, systemMatrix, taskMatrix));
     }, [props]);
+
+    useEffect(() => {
+        const plan = algorithmType == "free-first" ? freeFirstPlan : neighborModelingPlan;
+        setTicks(plan(paths, queue, systemMatrix, taskMatrix));
+    }, [algorithmType]);
 
     useEffect(() => {
         setStats(calculateStats(taskMatrix));

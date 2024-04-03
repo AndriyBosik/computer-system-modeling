@@ -26,7 +26,7 @@ export const PROCESSOR_STATUS = {
     RUNNING: "RUNNING"
 };
 
-export const TRANSFER_TYPE = {
+export const TRANSFER_STATUS = {
     PENDING: "PENDING",
     RUNNING: "RUNNING"
 };
