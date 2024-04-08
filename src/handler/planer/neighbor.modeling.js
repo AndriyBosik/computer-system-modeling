@@ -1,4 +1,5 @@
 import { PROCESSOR_STATUS, TASK_STATUS, TRANSFER_STATUS } from "../../metadata/const";
+import { toStr } from "./../debug";
 import { 
     addTransfer,
     assignTask, 
@@ -82,8 +83,7 @@ const getTransfers = (neighbor, task, taskMatrix, taskDefinitions) => {
 
 const findFreeProcessors = (k, definitions) => {
     return definitions
-        .filter(item => item.status == PROCESSOR_STATUS.PENDING)
-        .slice(0, k);
+        .filter(item => item.status == PROCESSOR_STATUS.PENDING);
 }
 
 const findRelevantNeighbor = (accumulator, value) => {
