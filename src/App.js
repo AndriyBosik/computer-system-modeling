@@ -12,6 +12,7 @@ import { checkCycle, checkConnected, buildPaths, buildTaskMatrix } from './handl
 import { Help } from './component/help/Help';
 import { QueueList } from './component/queue-list/QueueList';
 import { Diagram } from './component/diagram/Diagram';
+import Statistics from './component/statistics/Statistics';
 
 function App() {
     useEffect(() => {
@@ -156,7 +157,15 @@ function App() {
                         }
                     </div>
                     <div id="statistics" className="nav-tab">
-                        Statistics
+                        {
+                            systemChecked ? (
+                                <Statistics systemMatrix={diagramState.systemMatrix} paths={diagramState.systemPaths} />
+                            ) : (
+                                <div style={{fontSize: "25px"}}>
+                                    To use statistics, you should ensure that system on the "SYSTEM" tab is checked
+                                </div>
+                            )
+                        }
                     </div>
                     <div id="help" className="nav-tab">
                         <Help />

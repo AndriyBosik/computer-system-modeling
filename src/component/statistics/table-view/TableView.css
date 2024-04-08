@@ -1,0 +1,7 @@
+.TableView table {
+    margin-top: 40px;
+}
+
+.TableView table, .TableView th, .TableView td {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}

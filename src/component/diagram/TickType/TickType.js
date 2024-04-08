@@ -1,6 +1,5 @@
 import "./TickType.css";
 import { TICK_TYPE } from "../../../metadata/const";
-import { toStr } from "../../../handler/debug";
 import { useState } from "react";
 
 export const TickType = ({

@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import "./System.css";
-import { clearCanvas, doesIntersectsCircleAndLine, drawArrow, drawSystem, findIntersectionBetweenCircleAndLine, findIntersectionBetweenRectAndLine } from "../../handler/canvas.drawer";
-import { MESSAGE_PROCESS_COLOR, PACKET_PROCESS_COLOR, RADIUS } from "../../metadata/const";
+import { clearCanvas, doesIntersectsCircleAndLine, drawSystem } from "../../handler/canvas.drawer";
+import { RADIUS } from "../../metadata/const";
 
 const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initialRelations = []}) => {
     const [addProcess, setAddProcess] = useState(false);
@@ -133,7 +133,7 @@ const System = ({onCheck, onChange, initialStatus, initialProcesses = [], initia
 
     const findExistingRelation = (from, to) => {
         for (const relation of relations) {
-            if (relation.id1 == from && relation.id2 == to) {
+            if ((relation.id1 == from && relation.id2 == to) || (relation.id1 == to && relation.id2 == from)) {
                 return relation;
             }
         }

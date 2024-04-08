@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getConnectivity, getCriticalToBegin, getCriticalToEnd, normalize, simplify, sortByConnectivityDescAndVerticesCriticalToBeginAsc, sortByLateAndEarlyDeadlineDifferenceAsc, sortByVerticesCriticalToEndDescAndConnectivityDesc } from "../../handler/queue";
+import { getConnectivity, getCriticalToBegin, getCriticalToEnd, getQueueData, normalize, simplify, sortByConnectivityDescAndVerticesCriticalToBeginAsc, sortByLateAndEarlyDeadlineDifferenceAsc, sortByVerticesCriticalToEndDescAndConnectivityDesc } from "../../handler/queue";
 import "./QueueList.css";
 import { Queue } from "./queue/Queue";
 import M from "materialize-css";
@@ -17,22 +17,18 @@ export const QueueList = ({
     const graph = {vertices: task.tasks, ribs: task.relations};
 
     const {vertices, matrix} = normalize(graph);
-    const {simplifiedVertices, simplifiedMatrix} = simplify(vertices, matrix);
     const n = matrix.length;
-
-    const connectivity = getConnectivity(matrix);
-
-    const weightCriticalToBegin = getCriticalToBegin(vertices, matrix);
-    const weightCriticalToEnd = getCriticalToEnd(vertices, matrix);
-
-    const weightCritical = Math.max(...weightCriticalToEnd);
-
-    const verticesCriticalToBegin = getCriticalToBegin(simplifiedVertices, simplifiedMatrix);
-    const verticesCriticalToEnd = getCriticalToEnd(simplifiedVertices, simplifiedMatrix);
-
-    const v2 = sortByLateAndEarlyDeadlineDifferenceAsc(weightCriticalToBegin, weightCriticalToEnd);
-    const v4 = sortByVerticesCriticalToEndDescAndConnectivityDesc(verticesCriticalToEnd, connectivity);
-    const v11 = sortByConnectivityDescAndVerticesCriticalToBeginAsc(connectivity, verticesCriticalToBegin);
+    const {
+        connectivity,
+        weightCritical,
+        verticesCriticalToBegin,
+        verticesCriticalToEnd,
+        v2,
+        v4,
+        v11,
+        weightCriticalToBegin,
+        weightCriticalToEnd
+    } = getQueueData(vertices, matrix);
 
     return (
         <div className="QueueList s-vflex">

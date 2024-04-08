@@ -1,3 +1,33 @@
+export const getQueueData = (vertices, matrix) => {
+    const {simplifiedVertices, simplifiedMatrix} = simplify(vertices, matrix);
+
+    const connectivity = getConnectivity(matrix);
+
+    const weightCriticalToBegin = getCriticalToBegin(vertices, matrix);
+    const weightCriticalToEnd = getCriticalToEnd(vertices, matrix);
+
+    const weightCritical = Math.max(...weightCriticalToEnd);
+
+    const verticesCriticalToBegin = getCriticalToBegin(simplifiedVertices, simplifiedMatrix);
+    const verticesCriticalToEnd = getCriticalToEnd(simplifiedVertices, simplifiedMatrix);
+
+    const v2 = sortByLateAndEarlyDeadlineDifferenceAsc(weightCriticalToBegin, weightCriticalToEnd);
+    const v4 = sortByVerticesCriticalToEndDescAndConnectivityDesc(verticesCriticalToEnd, connectivity);
+    const v11 = sortByConnectivityDescAndVerticesCriticalToBeginAsc(connectivity, verticesCriticalToBegin);
+    
+    return {
+        weightCriticalToBegin,
+        weightCriticalToEnd,
+        connectivity,
+        weightCritical,
+        verticesCriticalToBegin,
+        verticesCriticalToEnd,
+        v2,
+        v4,
+        v11
+    };
+}
+
 export const normalize = graph => {
     const n = Math.max(...graph.vertices.map(item => item.id));
     if (n < 1) {
