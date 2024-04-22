@@ -1,4 +1,4 @@
-import { PROCESSOR_STATUS, TASK_STATUS, TRANSFER_STATUS } from "../../metadata/const";
+import { IO_STATUS, PROCESSOR_STATUS, TASK_STATUS, TRANSFER_STATUS } from "../../metadata/const";
 import { toStr } from "./../debug";
 import { 
     addTransfer,
@@ -112,6 +112,12 @@ const calculateVirtualDistance = (processor, taskMatrix, taskDefinitions, taskId
     const waitingState = {};
 
     const queue = new Array(systemDefinitions.length).fill(0).map(_ => []);
+    const ioState = new Array(systemDefinitions.length).fill(0).map(_ => ({
+        status: IO_STATUS.PENDING,
+        details: {
+            parentHop: null
+        }
+    }));
     for (let i = 0; i < waitingFor.length; i++) {
         const parentTaskId = waitingFor[i];
         const parentTaskProcessorId = taskDefinitions[parentTaskId].runningOn;
@@ -132,23 +138,37 @@ const calculateVirtualDistance = (processor, taskMatrix, taskDefinitions, taskId
     let completedTransfers = 0;
     let totalTicks = 0;
     while (completedTransfers < waitingFor.length) {
+        const completedReceivers = [];
         for (let i = 0; i < queue.length; i++) {
-            if (queue[i].length == 0) {
+            if (queue[i].length == 0 || ioState[i].status == IO_STATUS.WAITING) {
                 continue;
             }
             const transfer = queue[i][0];
+            const currentHopIndex = transfer.hops.indexOf(i);
+            const nextHop = transfer.hops[currentHopIndex + 1];
+            if (ioState[nextHop].status == IO_STATUS.WAITING && ioState[nextHop].details.parentHop != i) {
+                continue;
+            }
+
+            if (queue[nextHop].length > 0 && queue[nextHop][0].status == TRANSFER_STATUS.RUNNING) {
+                continue;
+            }
+
             transfer.status = TRANSFER_STATUS.RUNNING;
             transfer.ticksCount--;
+
+            ioState[nextHop].status = IO_STATUS.WAITING;
+            ioState[nextHop].details.parentHop = i;
+
             if (transfer.ticksCount == 0) {
+                completedReceivers.push(nextHop);
                 queue[i].splice(0, 1);
-                const currentHopIndex = transfer.hops.indexOf(i);
                 if (currentHopIndex == transfer.hops.length - 2) {
                     completedTransfers++;
                     continue;
                 } 
                 
                 const ticksCount = taskMatrix[transfer.parentTask][transfer.childTask]
-                const nextHop = transfer.hops[currentHopIndex + 1];
                 addToVirtualQueue(queue[nextHop], {
                     ...transfer,
                     status: TRANSFER_STATUS.PENDING,
@@ -156,6 +176,10 @@ const calculateVirtualDistance = (processor, taskMatrix, taskDefinitions, taskId
                 });
             }
         }
+        completedReceivers.forEach(index => {
+            ioState[index].status = IO_STATUS.PENDING;
+            ioState[index].details.parentHop = null;
+        });
         totalTicks++;
     }
 

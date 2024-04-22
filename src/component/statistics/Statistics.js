@@ -4,8 +4,8 @@ import "react-vis/dist/style.css";
 import "./Statistics.css";
 import Series from "./series/Series";
 import { generateStatistics } from "../../handler/statistics";
-import M from "materialize-css";
 import TableView from "./table-view/TableView";
+import OverallGraphics from "./overall-graphics/OverallGraphics";
 
 const Statistics = ({
     systemMatrix,
@@ -54,6 +54,7 @@ const Statistics = ({
                                 <TableView freeFirst={statistics.freeFirst} neighborModeling={statistics.neighborModeling} />
                             ) : (
                                 <div className="s-vflex">
+                                    <OverallGraphics freeFirst={statistics.freeFirst} neighborModeling={statistics.neighborModeling} />
                                     <Series
                                         data={statistics.freeFirst}
                                         title="Free First" />

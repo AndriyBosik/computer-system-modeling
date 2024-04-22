@@ -1,4 +1,4 @@
-import { PROCESSOR_STATUS, TASK_STATUS, TICK_TYPE, TRANSFER_STATUS } from "../../metadata/const";
+import { IO_STATUS, PROCESSOR_STATUS, TASK_STATUS, TICK_TYPE, TRANSFER_STATUS } from "../../metadata/const";
 
 export const buildTasksDefinitions = (taskMatrix, queue) => {
     const definitions = buildTasksDeps(taskMatrix).map((deps, index) => ({
@@ -31,6 +31,12 @@ export const buildSystemDefinitions = (systemMatrix, paths) => {
             connectivity: getConnectivity(i, systemMatrix),
             cache: [],
             io: {
+                status: IO_STATUS.PENDING,
+                details: {
+                    parentHop: null,
+                    parentTask: null,
+                    childTask: null
+                },
                 queue: [],
                 ticks: []
             },
@@ -167,11 +173,19 @@ export const runProcessors = (taskDefinitions, systemDefinitions) => {
 
 export const runIos = (taskDefinitions, systemDefinitions, taskMatrix) => {
     const pendingTransfers = [];
+    const completedReceivers = [];
+    const completedTransferers = [];
+    const empty = [];
     for (let i = 0; i < systemDefinitions.length; i++) {
-        const details = nextIoTick(systemDefinitions[i]);
+        const details = nextIoTick(systemDefinitions[i], completedTransferers, systemDefinitions);
+        if (details.empty) {
+            empty.push(i);
+        }
         if (!details.completedTransfer) {
             continue;
         }
+        completedTransferers.push(i);
+        completedReceivers.push(details.nextHop);
         const currentHopIndex = details.hops.indexOf(systemDefinitions[i].id);
         const hopsLength = details.hops.length;
         if (currentHopIndex == hopsLength - 2) {
@@ -189,6 +203,17 @@ export const runIos = (taskDefinitions, systemDefinitions, taskMatrix) => {
     for (let pendingTransfer of pendingTransfers) {
         addTransfer(pendingTransfer.processor, pendingTransfer.data);
     }
+    
+    for (let emptyOne of empty) {
+        continueIo(systemDefinitions[emptyOne]);
+    }
+
+    completedReceivers.forEach(index => {
+        systemDefinitions[index].io.status = IO_STATUS.PENDING;
+        systemDefinitions[index].io.details.parentHop = null;
+        systemDefinitions[index].io.details.parentTask = null;
+        systemDefinitions[index].io.details.childTask = null;
+    });
 }
 
 const nextProcessorTick = processor => {
@@ -221,35 +246,78 @@ const nextProcessorTick = processor => {
     return null;
 }
 
-const nextIoTick = processor => {
-    if (processor.io.queue.length == 0) {
+const nextIoTick = (processor, completedTransferers, systemDefinitions) => {
+    if (processor.io.queue.length == 0 && processor.io.status == IO_STATUS.PENDING) {
+        return {
+            completedTransfer: false,
+            empty: true
+        };
+    }
+    if (processor.io.status == IO_STATUS.WAITING) {
         processor.io.ticks.push({
-            type: TICK_TYPE.EMPTY
+            type: TICK_TYPE.WAITING,
+            details: {
+                parentHop: processor.io.details.parentHop,
+                childTask: processor.io.details.childTask,
+                parentTask: processor.io.details.parentTask
+            }
         });
         return {
+            empty: false,
             completedTransfer: false
         };
     }
     const currentTransfer = processor.io.queue[0];
+    const currentHopIndex = currentTransfer.hops.indexOf(processor.id);
+    const nextHop = currentTransfer.hops[currentHopIndex + 1];
+    if (systemDefinitions[nextHop].io.status == IO_STATUS.WAITING && systemDefinitions[nextHop].io.details.parentHop != processor.id) {
+        return {
+            empty: true,
+            completedTransfer: false
+        };
+    }
+    if (systemDefinitions[nextHop].io.queue.length > 0 && systemDefinitions[nextHop].io.queue[0].status == TRANSFER_STATUS.RUNNING) {
+        return {
+            empty: true,
+            completedTransfer: false
+        };
+    }
+
+    if (completedTransferers.includes(nextHop)) {
+        return {
+            empty: true,
+            completedTransfer: false
+        };
+    }
+
     currentTransfer.status = TRANSFER_STATUS.RUNNING;
     currentTransfer.ticksCount--;
-    const currentHopIndex = currentTransfer.hops.indexOf(processor.id);
+
+    systemDefinitions[nextHop].io.status = IO_STATUS.WAITING;
+    systemDefinitions[nextHop].io.details.parentHop = processor.id;
+    systemDefinitions[nextHop].io.details.parentTask = currentTransfer.parentTask;
+    systemDefinitions[nextHop].io.details.childTask = currentTransfer.childTask;
+
     processor.io.ticks.push({
         type: TICK_TYPE.TRANSFER,
         details: {
             parentTask: currentTransfer.parentTask,
             childTask: currentTransfer.childTask,
-            nextHop: currentTransfer.hops[currentHopIndex + 1]
+            nextHop: nextHop
         }
     });
     if (currentTransfer.ticksCount > 0) {
         return {
+            empty: false,
             completedTransfer: false
         };
     }
     const answer = {
         completedTransfer: true,
-        ...currentTransfer
+        ...currentTransfer,
+        nextHop: nextHop,
+        empty: false,
+        status: TRANSFER_STATUS.PENDING
     };
     processor.io.queue = processor.io.queue.slice(1);
     return answer;
@@ -306,4 +374,21 @@ const buildTasksDeps = taskMatrix => {
         }
     }
     return deps;
+}
+
+const continueIo = processor => {
+    if (processor.io.status == IO_STATUS.WAITING) {
+        processor.io.ticks.push({
+            type: TICK_TYPE.WAITING,
+            details: {
+                parentHop: processor.io.details.parentHop,
+                childTask: processor.io.details.childTask,
+                parentTask: processor.io.details.parentTask
+            }
+        });
+        return;
+    }
+    processor.io.ticks.push({
+        type: TICK_TYPE.EMPTY
+    });
 }

@@ -30,3 +30,8 @@ export const TRANSFER_STATUS = {
     PENDING: "PENDING",
     RUNNING: "RUNNING"
 };
+
+export const IO_STATUS = {
+    PENDING: "PENDING",
+    WAITING: "WAITING"
+};

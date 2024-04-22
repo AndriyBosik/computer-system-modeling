@@ -65,3 +65,7 @@
     box-shadow: 0 0 20px 1px #f4511ebb;
     border: 3px solid rgba(0, 0, 0, 0.2);
 }
+
+.TickType.dataTransfer.WAITING {
+    font-size: 15px !important;
+}

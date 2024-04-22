@@ -124,6 +124,8 @@ export const Diagram = props => {
                             tick.map((item, processorIndex) => (
                                 <TickType
                                     key={mode + ":" + processorIndex}
+                                    primaryMode={mode}
+                                    secondaryMode={mode == "execution" ? "dataTransfer" : "execution"}
                                     primaryTick={mode == "execution" ? item.execution : item.dataTransfer}
                                     secondaryTick={mode != "execution" ? item.execution : item.dataTransfer} />
                             ))

@@ -12,6 +12,8 @@ const StatisticsForm = ({
     const [connectivityStep, setConnectivityStep] = useState('0.1');
     const [minVertexWeight, setMinVertexWeight] = useState('10');
     const [maxVertexWeight, setMaxVertexWeight] = useState('20');
+    const [minRelationWeight, setMinRelationWeight] = useState('10');
+    const [maxRelationWeight, setMaxRelationWeight] = useState('20');
     const [totalGraphs, setTotalGraphs] = useState('10');
 
     const handleSubmit = event => {
@@ -25,6 +27,8 @@ const StatisticsForm = ({
             connectivityStep,
             minVertexWeight,
             maxVertexWeight,
+            minRelationWeight,
+            maxRelationWeight,
             totalGraphs
         });
     };
@@ -68,6 +72,14 @@ const StatisticsForm = ({
                     <div className="input-field col s4">
                         <input id="totalGraphs" type="number" value={totalGraphs} onChange={event => setTotalGraphs(event.target.value)} />
                         <label className="active" htmlFor="totalGraphs">Total Amount of Generated Graphs</label>
+                    </div>
+                    <div className="input-field col s4">
+                        <input id="minRelationWeight" type="number" value={minRelationWeight} onChange={event => setMinRelationWeight(event.target.value)} />
+                        <label className="active" htmlFor="minRelationWeight">Minimum Relation Weight</label>
+                    </div>
+                    <div className="input-field col s4">
+                        <input id="maxRelationWeight" type="number" value={maxRelationWeight} onChange={event => setMaxRelationWeight(event.target.value)} />
+                        <label className="active" htmlFor="maxRelationWeight">Maximum Relation Weight</label>
                     </div>
                 </div>
                 <div className="s-hflex-end">

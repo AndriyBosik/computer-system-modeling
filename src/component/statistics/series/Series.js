@@ -59,7 +59,8 @@ const Series = ({
     const names = ({
         deadline: "Deadline",
         pathConnectivity: "Critical path to the end (Descending) and connectivity (Descending)",
-        connectivityPath: "Connectivity (Descending) and critical path to the begin (Ascending)"
+        connectivityPath: "Connectivity (Descending) and critical path to the begin (Ascending)",
+        average: "Average"
     });
 
     const colors = {
@@ -73,7 +74,7 @@ const Series = ({
             <h4>{title}</h4>
             <div className="s-hflex">
                 {
-                    ['deadline', 'pathConnectivity', 'connectivityPath'].map(item => (
+                    ['deadline', 'pathConnectivity', 'connectivityPath', 'average'].map(item => (
                         <div className="s-vflex">
                             <XYPlot 
                                     width={data.length * 20} 
@@ -128,7 +129,7 @@ const Series = ({
                                         {
                                             title: "Algorithm Efficiency",
                                             color: colors.algorithmEfficiency
-                                        },
+                                        }
                                     ]}
                                 />
                             </XYPlot>
