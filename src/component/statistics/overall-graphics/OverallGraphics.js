@@ -11,7 +11,7 @@ const names = {
 };
 
 const colors = {
-    findFirst: {
+    freeFirst: {
         deadline: "#5e35b1",
         pathConnectivity: "#d81b60",
         connectivityPath: "#4caf50"
@@ -99,7 +99,6 @@ const OverallGraphics = ({
     };
 
     const getGraphicsData = (metric, vertexesCount) => {
-
         const values = {
             freeFirst: {
                 deadline: connectivities.reduce((acc, value) => ({...acc, [value]: []}), {}),
@@ -149,7 +148,7 @@ const OverallGraphics = ({
     return (
         <div className="OverallGraphics s-vflex" style={{marginTop: "40px"}}>
             <div className="row full-width">
-                <div class="input-field col s4">
+                <div className="input-field col s4">
                     <select className="vertexes-count" value={selectedVertexesCount}>
                         <option value="" disabled selected>Choose vertex count</option>
                         {
@@ -160,7 +159,7 @@ const OverallGraphics = ({
                     </select>
                     <label>Vertex count</label>
                 </div>
-                <div class="input-field col s4">
+                <div className="input-field col s4">
                     <select className="metric" value={selectedMetric}>
                         <option value="" disabled selected>Choose metric</option>
                         <option value="acceleration">Acceleration</option>
@@ -190,15 +189,15 @@ const OverallGraphics = ({
                             <LineSeries
                                 data={data.freeFirst.deadline}
                                 style={{ strokeWidth: 3 }}
-                                color={colors.findFirst.deadline} />
+                                color={colors.freeFirst.deadline} />
                             <LineSeries
                                 data={data.freeFirst.pathConnectivity}
                                 style={{ strokeWidth: 3 }}
-                                color={colors.findFirst.pathConnectivity} />
+                                color={colors.freeFirst.pathConnectivity} />
                             <LineSeries
                                 data={data.freeFirst.connectivityPath}
                                 style={{ strokeWidth: 3 }}
-                                color={colors.findFirst.connectivityPath} />
+                                color={colors.freeFirst.connectivityPath} />
 
                             <LineSeries
                                 data={data.neighborModeling.deadline}
@@ -218,16 +217,16 @@ const OverallGraphics = ({
                                 orientation="vertical"
                                 items={[
                                     {
-                                        title: "Find First [Deadline]",
-                                        color: colors.findFirst.deadline
+                                        title: "Free First [Deadline]",
+                                        color: colors.freeFirst.deadline
                                     },
                                     {
-                                        title: "Find First [Path -> Connectivity]",
-                                        color: colors.findFirst.pathConnectivity
+                                        title: "Free First [Path -> Connectivity]",
+                                        color: colors.freeFirst.pathConnectivity
                                     },
                                     {
-                                        title: "Find First [Connectivity -> Path]",
-                                        color: colors.findFirst.connectivityPath
+                                        title: "Free First [Connectivity -> Path]",
+                                        color: colors.freeFirst.connectivityPath
                                     },
                                     {
                                         title: "Neighbor Modeling [Deadline]",

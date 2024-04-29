@@ -60,19 +60,6 @@ export const generateStatistics = (
             }
         }
     }
-    // while (data.length < generationData.totalGraphs) {
-        
-
-    //     currentVertexes += generationData.vertexStep;
-    //     if (currentVertexes > generationData.maxVertexes) {
-    //         currentVertexes = generationData.minVertexes;
-    //     }
-
-    //     currentConnectivity += generationData.connectivityStep;
-    //     if (currentConnectivity > generationData.maxConnectivity) {
-    //         currentConnectivity = generationData.minConnectivity;
-    //     }
-    // }
     return data.map(item => ({
         ...item,
         queue: {
